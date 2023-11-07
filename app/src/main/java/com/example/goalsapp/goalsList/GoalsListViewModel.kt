@@ -33,7 +33,7 @@ class GoalsListViewModel @Inject constructor(
             }
             is GoalListEvents.ClickGoalDone -> {
                 viewModelScope.launch{
-                    repository.insertGoal(event.goal.copy(isDone = event.isDone)
+                    repository.insertGoal(event.goal.copy(isDone = event.isDone))
                 }
             }
             is GoalListEvents.DeleteGoal -> {
