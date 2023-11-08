@@ -12,6 +12,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -37,10 +38,14 @@ fun GoalListScreen(
             when(event){
                 is UiEvents.Navigate -> navigate(event)
                 is UiEvents.ShowSnackBar -> {
-                    snackbarHostState.showSnackbar(
+                    val result = snackbarHostState.showSnackbar(
                         message = event.message,
                         actionLabel = event.actionLabel
                     )
+
+                    if (result == SnackbarResult.ActionPerformed){
+                        viewModel.onEvent(GoalListEvents.UndoDeleteGoal)
+                    }
                 }
                 else -> Unit
             }
@@ -50,7 +55,7 @@ fun GoalListScreen(
     Scaffold(
         snackbarHost = { SnackbarHost(snackbarHostState)},
         floatingActionButton = {
-            FloatingActionButton(onClick = { /*TODO*/ }) {
+            FloatingActionButton(onClick = {viewModel.onEvent(GoalListEvents.AddNewGoal) }) {
                 Icon(imageVector = Icons.Default.AddCircle, contentDescription = "Add new Goal" )
             }
         }
