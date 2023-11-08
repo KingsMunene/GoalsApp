@@ -62,7 +62,7 @@ fun GoalItem(
 
             Text(
                 text = goal.description,
-                style = MaterialTheme.typography.headlineMedium
+                style = MaterialTheme.typography.bodyMedium
             )
         }
 
