@@ -19,9 +19,9 @@ class GoalsListViewModel @Inject constructor(
 
     val goalsList = repository.getGoals()
 
-    val _UiEvents = Channel<UiEvents>()
+    private val _uiEvents = Channel<UiEvents>()
 
-    val uiEvents = _UiEvents.receiveAsFlow()
+    val uiEvents = _uiEvents.receiveAsFlow()
 
     private var deletedGoal: Goal? = null
 
@@ -62,7 +62,7 @@ class GoalsListViewModel @Inject constructor(
 
     fun sendEvent(event: UiEvents){
         viewModelScope.launch {
-            _UiEvents.send(event)
+            _uiEvents.send(event)
         }
     }
 
