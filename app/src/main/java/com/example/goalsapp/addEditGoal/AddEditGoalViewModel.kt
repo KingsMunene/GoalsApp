@@ -9,11 +9,13 @@ import androidx.lifecycle.viewModelScope
 import com.example.goalsapp.data.Goal
 import com.example.goalsapp.data.GoalRepository
 import com.example.goalsapp.utils.UiEvents
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class AddEditGoalViewModel @Inject constructor(
     private val repository: GoalRepository,
     savedStateHandle: SavedStateHandle
@@ -21,10 +23,10 @@ class AddEditGoalViewModel @Inject constructor(
 
     var goal by mutableStateOf<Goal?>(null)
         private set
-    var title: String by mutableStateOf("")
+    var title by mutableStateOf("")
         private set
 
-    var description: String by mutableStateOf("")
+    var description by mutableStateOf("")
         private set
 
     val _uiEvents = Channel<UiEvents>()
@@ -47,10 +49,10 @@ class AddEditGoalViewModel @Inject constructor(
     fun onEvent(event: AddEditGoalEvents){
         when(event){
             is AddEditGoalEvents.OnEditDescription -> {
-                title = event.description
+                description = event.description
             }
             is AddEditGoalEvents.OnEditTitle -> {
-                description = event.title
+                title = event.title
             }
             AddEditGoalEvents.SaveGoal -> {
                 viewModelScope.launch {
@@ -70,6 +72,8 @@ class AddEditGoalViewModel @Inject constructor(
                             id = goal?.id
                         )
                     )
+
+                    sendEvent(UiEvents.PopBackStack)
                 }
             }
         }
